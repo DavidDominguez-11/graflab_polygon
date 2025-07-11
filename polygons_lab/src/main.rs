@@ -25,8 +25,6 @@ fn main() {
 
 fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer, fill_color: Color) {
 
-    framebuffer.set_current_color(Color::WHITE);
-    dibujar_contorno(poligono, framebuffer);
 
     let min_y = poligono.iter().map(|&(_, y)| y).min().unwrap();
     let max_y = poligono.iter().map(|&(_, y)| y).max().unwrap();
@@ -62,6 +60,9 @@ fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuff
             }
         }
     }
+
+    framebuffer.set_current_color(Color::WHITE);
+    dibujar_contorno(poligono, framebuffer);
 }
 
 
