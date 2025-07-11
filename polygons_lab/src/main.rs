@@ -13,6 +13,20 @@ fn main() {
     framebuffer.set_background_color(Color::new(50, 50, 100, 255));
     framebuffer.clear();
 
+    let poligono1 = vec![
+    (165, 380), (185, 360), (180, 330), (207, 345), 
+    (233, 330), (230, 360), (250, 380), (220, 385), 
+    (205, 410), (193, 383)
+    ];
+
+    let poligono2 = vec![
+        (321, 335), (288, 286), (339, 251), (374, 302)
+    ];
+
+    let poligono3 = vec![
+        (377, 249), (411, 197), (436, 249)
+    ];
+
     let poligono4 = vec![
         (413, 177), (448, 159), (502, 88), (553, 53), 
         (535, 36), (676, 37), (660, 52), (750, 145), 
@@ -28,6 +42,31 @@ fn main() {
     dibujar_poligono_con_agujero(&poligono4, &poligono5, &mut framebuffer, Color::GREEN);
 
     framebuffer.render_to_file("poligono4-5.bmp");
+
+    framebuffer.clear();
+    let poligono3 = vec![
+        (377, 249), (411, 197), (436, 249)
+    ];
+    dibujar_poligono_relleno(&poligono3, &mut framebuffer, Color::RED);
+    framebuffer.render_to_file("poligono3.bmp");
+
+    framebuffer.clear();
+    let poligono2 = vec![
+        (321, 335), (288, 286), (339, 251), (374, 302)
+    ];
+    dibujar_poligono_relleno(&poligono2, &mut framebuffer, Color::BLUE);
+    framebuffer.render_to_file("poligono2.bmp");
+
+    framebuffer.clear();
+    let poligono1 = vec![
+        (165, 380), (185, 360), (180, 330), (207, 345), 
+        (233, 330), (230, 360), (250, 380), (220, 385), 
+        (205, 410), (193, 383)
+    ];
+    dibujar_poligono_relleno(&poligono1, &mut framebuffer, Color::YELLOW);
+    framebuffer.render_to_file("poligono1.bmp");
+
+
 }
 
 fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer, fill_color: Color) {
