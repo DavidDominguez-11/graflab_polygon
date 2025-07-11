@@ -13,20 +13,15 @@ fn main() {
     framebuffer.set_background_color(Color::new(50, 50, 100, 255));
     framebuffer.clear();
 
-    let poligono1 = vec![
-        (165, 380), (185, 360), (180, 330), (207, 345), 
-        (233, 330), (230, 360), (250, 380), (220, 385), 
-        (205, 410), (193, 383)
+    let poligono2 = vec![
+        (321, 335), (288, 286), (339, 251), (374, 302)
     ];
 
-    dibujar_poligono_relleno(&poligono1, &mut framebuffer, Color::YELLOW);
-    framebuffer.render_to_file("poligono1.bmp");
+    dibujar_poligono_relleno(&poligono2, &mut framebuffer, Color::BLUE);
+    framebuffer.render_to_file("poligono2.bmp");
 }
 
 fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer, fill_color: Color) {
-
-    framebuffer.set_current_color(Color::WHITE);
-    dibujar_contorno(poligono, framebuffer);
 
     let min_y = poligono.iter().map(|&(_, y)| y).min().unwrap();
     let max_y = poligono.iter().map(|&(_, y)| y).max().unwrap();
@@ -62,6 +57,9 @@ fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuff
             }
         }
     }
+
+    framebuffer.set_current_color(Color::WHITE);
+    dibujar_contorno(poligono, framebuffer);
 }
 
 
