@@ -13,15 +13,27 @@ fn main() {
     framebuffer.set_background_color(Color::new(50, 50, 100, 255));
     framebuffer.clear();
 
-    let poligono3 = vec![
-        (377, 249), (411, 197), (436, 249)
+    let poligono4 = vec![
+        (413, 177), (448, 159), (502, 88), (553, 53), 
+        (535, 36), (676, 37), (660, 52), (750, 145), 
+        (761, 179), (672, 192), (659, 214), (615, 214), 
+        (632, 230), (580, 230), (597, 215), (552, 214), 
+        (517, 144), (466, 180)
     ];
 
-    dibujar_poligono_relleno(&poligono3, &mut framebuffer, Color::RED);
-    framebuffer.render_to_file("poligono3.bmp");
+    let poligono5 = vec![
+        (682, 175), (708, 120), (735, 148), (739, 170)
+    ];
+
+    dibujar_poligono_con_agujero(&poligono4, &poligono5, &mut framebuffer, Color::GREEN);
+
+    framebuffer.render_to_file("poligono4-5.bmp");
 }
 
 fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer, fill_color: Color) {
+
+    framebuffer.set_current_color(Color::WHITE);
+    dibujar_contorno(poligono, framebuffer);
 
     let min_y = poligono.iter().map(|&(_, y)| y).min().unwrap();
     let max_y = poligono.iter().map(|&(_, y)| y).max().unwrap();
@@ -75,3 +87,68 @@ fn dibujar_contorno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer) {
         );
     }
 }
+
+fn dibujar_poligono_con_agujero(
+    poligono1: &[(i32, i32)],
+    poligono2: &[(i32, i32)],
+    framebuffer: &mut Framebuffer,
+    fill_color: Color,
+) {
+    framebuffer.set_current_color(fill_color);
+    let min_y = poligono1.iter()
+        .chain(poligono2.iter())
+        .map(|&(_, y)| y)
+        .min()
+        .unwrap();
+    let max_y = poligono1.iter()
+        .chain(poligono2.iter())
+        .map(|&(_, y)| y)
+        .max()
+        .unwrap();
+    for y in min_y..=max_y {
+        let mut intersecciones = Vec::new();
+
+        intersecciones.extend(scanline_intersecciones(y, poligono1));
+        intersecciones.extend(scanline_intersecciones(y, poligono2));
+
+        intersecciones.sort();
+
+        for i in (0..intersecciones.len()).step_by(2) {
+            if i + 1 >= intersecciones.len() {
+                break;
+            }
+            let x_start = intersecciones[i];
+            let x_end = intersecciones[i + 1];
+
+            for x in x_start..=x_end {
+                framebuffer.set_pixel(x as u32, y as u32);
+            }
+        }
+    }
+
+    framebuffer.set_current_color(Color::WHITE);
+    dibujar_contorno(poligono1, framebuffer);
+    dibujar_contorno(poligono2, framebuffer);
+}
+
+
+fn scanline_intersecciones(y: i32, poligono: &[(i32, i32)]) -> Vec<i32> {
+    let mut intersecciones = Vec::new();
+
+    for i in 0..poligono.len() {
+        let (x1, y1) = poligono[i];
+        let (x2, y2) = poligono[(i + 1) % poligono.len()];
+
+        if y1 == y2 {
+            continue;
+        }
+
+        if (y >= y1 && y < y2) || (y >= y2 && y < y1) {
+            let x = x1 + ((y - y1) as f32 * (x2 - x1) as f32 / (y2 - y1) as f32).round() as i32;
+            intersecciones.push(x);
+        }
+    }
+
+    intersecciones
+}
+
