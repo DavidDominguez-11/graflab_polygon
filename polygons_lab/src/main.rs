@@ -13,12 +13,12 @@ fn main() {
     framebuffer.set_background_color(Color::new(50, 50, 100, 255));
     framebuffer.clear();
 
-    let poligono2 = vec![
-        (321, 335), (288, 286), (339, 251), (374, 302)
+    let poligono3 = vec![
+        (377, 249), (411, 197), (436, 249)
     ];
 
-    dibujar_poligono_relleno(&poligono2, &mut framebuffer, Color::BLUE);
-    framebuffer.render_to_file("poligono2.bmp");
+    dibujar_poligono_relleno(&poligono3, &mut framebuffer, Color::RED);
+    framebuffer.render_to_file("poligono3.bmp");
 }
 
 fn dibujar_poligono_relleno(poligono: &[(i32, i32)], framebuffer: &mut Framebuffer, fill_color: Color) {
